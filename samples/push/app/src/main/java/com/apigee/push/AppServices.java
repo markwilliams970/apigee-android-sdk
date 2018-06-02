@@ -4,7 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.apigee.sdk.ApigeeClient;
-import com.apigee.sdk.data.client.ApigeeDataClient;
+import com.apigee.sdk.data.client.DataClient;
 import com.apigee.sdk.data.client.callbacks.ApiResponseCallback;
 import com.apigee.sdk.data.client.callbacks.DeviceRegistrationCallback;
 import com.apigee.sdk.data.client.entities.Device;
@@ -18,10 +18,10 @@ import static com.apigee.push.Util.*;
 
 public final class AppServices {
 
-  private static ApigeeDataClient client;
+  private static DataClient client;
   private static Device device;
 
-  static synchronized ApigeeDataClient getClient(Context context) {
+  static synchronized DataClient getClient(Context context) {
     if (client == null) {
     	if (ORG.equals("<<your org name here>>")) {
     		Log.e(TAG, "ORG value has not been set.");
@@ -36,7 +36,7 @@ public final class AppServices {
   static void loginAndRegisterForPush(final Context context) {
 
     if ((USER != null) && (USER.length() > 0)) {
-        ApigeeDataClient dataClient = getClient(context);
+		DataClient dataClient = getClient(context);
     	if (dataClient != null) {
     		dataClient.authorizeAppUserAsync(USER, PASSWORD, new ApiResponseCallback() {
 
@@ -82,7 +82,7 @@ public final class AppServices {
   static void register(final Context context, final String regId) {
     Log.i(TAG, "registering device: " + regId);
 
-    ApigeeDataClient dataClient = getClient(context);
+	  DataClient dataClient = getClient(context);
 	if (dataClient != null) {
 
 		dataClient.registerDeviceForPushAsync(dataClient.getUniqueDeviceID(), NOTIFIER, regId, null, new DeviceRegistrationCallback() {
@@ -92,7 +92,7 @@ public final class AppServices {
         Log.i(TAG, "register response: " + device);
         AppServices.device = device;
         displayMessage(context, "Device registered as: " + regId);
-        ApigeeDataClient dataClient = getClient(context);
+		  DataClient dataClient = getClient(context);
 
         if (dataClient != null) {
         	// connect Device to current User - if there is one
@@ -135,7 +135,7 @@ public final class AppServices {
 	  if (device == null) {
 		  displayMessage(context, "Device not registered. ORG value set in Settings.java?");
 	  } else {
-		  ApigeeDataClient dataClient = getClient(context);
+		  DataClient dataClient = getClient(context);
 		  if (dataClient != null) {
 			  GCMDestination destination = GCMDestination.destinationSingleDevice(device.getUuid());
 			  GCMPayload payload = new GCMPayload();

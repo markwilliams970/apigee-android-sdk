@@ -14,3 +14,4 @@ target/
 
 /source/.idea/workspace.xml
 samples/push/.idea
+samples/push/app/src/main/java/com/apigee/push/Settings.java
